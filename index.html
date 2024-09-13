@@ -10,14 +10,45 @@
 
 
 <script>
-// 设置定时器，2分钟触发提示
-setTimeout(function() {
-    // 使用alert弹出提示框
-    alert("时间到！是否进行跳转？");
+// 设置定时器
+let initialTimer = null;
+let autoRedirectTimer = null;
 
-    // 用户点击确定后，跳转到指定的URL
-    window.location.href = "https://tmx315.github.io/tmx002/";
-}, 120000); // 2分钟
+function resetInitialTimer() {
+    // 清除现有的初始定时器
+    if (initialTimer) {
+        clearTimeout(initialTimer);
+    }
+    // 重新设置5分钟后的初始定时器
+    initialTimer = setTimeout(function() {
+        // 弹出对话框
+        let userChoice = confirm("2分钟以到达！您可选择是否撤回首页？");
+        if (userChoice) {
+            // 用户点击确定，立即跳转
+            window.location.href = "https://tmx315.github.io/tmx002/"; // 这里替换成你想要跳转的网址
+        } else {
+            // 用户点击取消，设置10秒后自动跳转
+            autoRedirectTimer = setTimeout(function() {
+                window.location.href = "https://tmx315.github.io/tmx002/"; // 同上
+            }, 0); // 10秒 = 10000毫秒
+        }
+    }, 120000); // 5分钟 = 300000毫秒
+}
+
+window.onload = function() {
+    // 立即开始5分钟计时
+    resetInitialTimer();
+};
+
+// 清除自动跳转定时器
+window.onbeforeunload = function() {
+    if (autoRedirectTimer) {
+        clearTimeout(autoRedirectTimer);
+    }
+    if (initialTimer) {
+        clearTimeout(initialTimer);
+    }
+};
 </script>
 
 
